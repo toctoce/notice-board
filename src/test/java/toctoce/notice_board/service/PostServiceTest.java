@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 import toctoce.notice_board.dto.PostUpdateRequestDto;
@@ -34,7 +33,6 @@ class PostServiceTest {
         Assertions.assertThat(post.getTitle()).isEqualTo("title1");
         Assertions.assertThat(post.getContent()).isEqualTo("content1");
         Assertions.assertThat(post.getPassword()).isEqualTo("password1");
-
     }
 
     @Test
@@ -125,6 +123,4 @@ class PostServiceTest {
         long postId = postService.createPost(dto);
         return postId;
     }
-
-
 }
