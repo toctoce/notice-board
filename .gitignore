@@ -1,0 +1,22 @@
+# Build files
+/build/
+/.gradle/
+/gradle/
+
+# IDE files
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# Log files
+*.log
+logs/
+
+# Operating System files
+# Mac
+.DS_Store
+
+# Production files
+*.jar
+*.war
