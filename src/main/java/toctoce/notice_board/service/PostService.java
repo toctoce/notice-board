@@ -18,7 +18,7 @@ public class PostService {
     private final PostRepository postRepository;
 
     public long createPost(PostCreateRequestDto dto) {
-        Post post = new Post(dto);
+        Post post = Post.createPost(dto);
         postRepository.save(post);
         return post.getId();
     }
