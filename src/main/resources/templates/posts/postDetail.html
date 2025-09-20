@@ -41,13 +41,43 @@
         </div>
         <ul th:unless="${post.comments.isEmpty()}" class="list-group">
             <li th:each="comment : ${post.comments}" class="list-group-item">
-                <div class="d-flex justify-content-between">
-                    <strong><span th:text="${comment.author}">댓글 작성자</span></strong>
-                    <small class="text-muted" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">댓글 작성일</small>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong><span th:text="${comment.author}">댓글 작성자</span></strong>
+                        <small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">댓글 작성일</small>
+                    </div>
+                    <div>
+                        <a th:href="@{/comments/{commentId}/edit(commentId=${comment.id})}" class="btn btn-warning btn-sm me-2">수정</a>
+                        <form th:action="@{/comments/{commentId}(commentId=${comment.id})}" method="post" class="d-inline">
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                        </form>
+                    </div>
                 </div>
                 <p class="mt-2 mb-1" th:text="${comment.content}">댓글 내용입니다.</p>
             </li>
         </ul>
+    </div>
+
+    <div class="mt-4">
+        <h5>댓글 작성</h5>
+        <form th:action="@{/posts/{postId}/comments(postId=${post.id})}" method="post">
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <label for="commentAuthor" class="form-label visually-hidden">작성자</label>
+                    <input type="text" id="commentAuthor" name="author" class="form-control" placeholder="작성자">
+                </div>
+                <div class="col-md-6">
+                    <label for="commentPassword" class="form-label visually-hidden">비밀번호</label>
+                    <input type="password" id="commentPassword" name="password" class="form-control" placeholder="비밀번호">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="commentContent" class="form-label visually-hidden">내용</label>
+                <textarea id="commentContent" name="content" class="form-control" rows="3" placeholder="댓글을 남겨주세요"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+        </form>
     </div>
 </div>
 
