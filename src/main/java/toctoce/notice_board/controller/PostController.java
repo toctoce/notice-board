@@ -6,8 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.PostCreateRequestDto;
+import toctoce.notice_board.dto.PostUpdateRequestDto;
 import toctoce.notice_board.service.PostService;
 
 import java.util.List;
@@ -43,4 +45,16 @@ public class PostController {
         return "posts/postDetail";
     }
 
+    @GetMapping("/posts/{postId}/edit")
+    public String editPostForm(Model model, @PathVariable long postId) {
+        Post post = postService.findOne(postId);
+        model.addAttribute("post", post);
+        return "posts/editPostForm";
+    }
+
+    @PutMapping("/posts/{postId}/edit")
+    public String editPost(PostUpdateRequestDto dto, @PathVariable long postId) {
+        postService.updatePost(postId, dto);
+        return "redirect:/posts/" + postId;
+    }
 }
