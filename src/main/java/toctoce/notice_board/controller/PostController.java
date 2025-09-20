@@ -10,10 +10,19 @@ import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 import toctoce.notice_board.service.PostService;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+
+    @GetMapping("/posts")
+    public String home(Model model) {
+        List<Post> posts = postService.findPosts();
+        model.addAttribute("posts", posts);
+        return "posts/postList";
+    }
 
     @GetMapping("/posts/new")
     public String createPostForm(Model model) {
@@ -33,4 +42,5 @@ public class PostController {
         model.addAttribute("post", post);
         return "posts/postDetail";
     }
+
 }
