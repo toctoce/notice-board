@@ -1,14 +1,13 @@
 package toctoce.notice_board.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 import toctoce.notice_board.dto.PostUpdateRequestDto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,14 +25,20 @@ public class Post {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments =  new ArrayList<>();
+
     protected Post() {}
 
-    public Post(PostCreateRequestDto dto) {
-        this.author = dto.getAuthor();
-        this.title = dto.getTitle();
-        this.content = dto.getContent();
-        this.password = dto.getPassword();
-        this.createdAt = LocalDateTime.now();
+    public static Post createPost(PostCreateRequestDto dto) {
+        Post post = new Post();
+
+        post.author = dto.getAuthor();
+        post.title = dto.getTitle();
+        post.content = dto.getContent();
+        post.password = dto.getPassword();
+        post.createdAt = LocalDateTime.now();
+        return post;
     }
 
     public void softDelete() {
