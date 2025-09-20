@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import toctoce.notice_board.domain.Comment;
 import toctoce.notice_board.dto.CommentCreateRequestDto;
 import toctoce.notice_board.dto.CommentUpdateRequestDto;
@@ -12,6 +13,7 @@ import toctoce.notice_board.dto.PostCreateRequestDto;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 public class CommentServiceTest {
     @Autowired PostService postService;
     @Autowired CommentService commentService;
@@ -26,7 +28,7 @@ public class CommentServiceTest {
         //then
         Comment comment = commentService.findOne(commentId);
         assertEquals("content1", comment.getContent());
-        assertEquals("author1", comment.getAuther());
+        assertEquals("author1", comment.getAuthor());
         assertEquals("password1", comment.getPassword());
     }
     @Test
