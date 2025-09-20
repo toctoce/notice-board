@@ -2,10 +2,7 @@ package toctoce.notice_board.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import toctoce.notice_board.domain.Comment;
 import toctoce.notice_board.dto.CommentCreateRequestDto;
 import toctoce.notice_board.dto.CommentUpdateRequestDto;
@@ -26,6 +23,14 @@ public class CommentController {
     @PutMapping("/comments/{commentId}")
     public String editComment(CommentUpdateRequestDto dto, @PathVariable long commentId) {
         commentService.updateComment(dto, commentId);
+        Comment comment = commentService.findOne(commentId);
+        return "redirect:/posts/" + comment.getPost().getId();
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public String  deleteComment(String password, @PathVariable long commentId) {
+        System.out.println("password = " + password);
+        commentService.deleteComment(commentId, password);
         Comment comment = commentService.findOne(commentId);
         return "redirect:/posts/" + comment.getPost().getId();
     }

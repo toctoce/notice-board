@@ -49,12 +49,18 @@
                         <strong><span th:text="${comment.author}">댓글 작성자</span></strong>
                         <small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">댓글 작성일</small>
                     </div>
-                    <div>
+                    <div class="d-flex justify-content-end align-items-center">
                         <button type="button" class="btn btn-warning btn-sm me-2 edit-comment-btn" th:data-comment-id="${comment.id}">수정</button>
-                        <form th:action="@{/comments/{commentId}(commentId=${comment.id})}" method="post" class="d-inline">
-                            <input type="hidden" name="_method" value="delete">
-                            <button type="submit" class="btn btn-danger btn-sm">삭제</button>
-                        </form>
+
+                        <div class="d-flex align-items-center">
+                            <button type="button" class="btn btn-danger btn-sm delete-trigger-btn me-2" th:data-comment-id="${comment.id}">삭제</button>
+
+                            <form th:action="@{/comments/{commentId}(commentId=${comment.id})}" method="post" class="d-none delete-form-for-comment" th:id="'deleteForm-' + ${comment.id}">
+                                <input type="hidden" name="_method" value="delete">
+                                <input type="password" name="password" placeholder="비밀번호" class="form-control form-control-sm d-inline-block w-auto me-2">
+                                <button type="submit" class="btn btn-danger btn-sm">확인</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <p class="mt-2 mb-1 comment-text" th:text="${comment.content}">댓글 내용입니다.</p>
@@ -128,5 +134,20 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 삭제 버튼 클릭 이벤트
+        document.querySelectorAll('.delete-trigger-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                const form = document.getElementById('deleteForm-' + commentId);
+
+                // 해당 댓글의 삭제 버튼과 폼을 토글합니다.
+                this.classList.add('d-none'); // 삭제 버튼 숨기기
+                form.classList.remove('d-none'); // 폼 보이기
+            });
+        });
+    });
+</script>
 </body>
 </html>
