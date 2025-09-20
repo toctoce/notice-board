@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title th:text="${post.title}">게시글 상세</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hidden-form {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,13 +28,11 @@
 
     <div class="d-flex justify-content-end mb-4">
         <a th:href="@{/posts/{postId}/edit(postId=${post.id})}" class="btn btn-warning me-2">수정</a>
-
         <form th:action="@{/posts/{postId}(postId=${post.id})}" method="post">
             <input type="hidden" name="_method" value="delete">
             <input type="password" name="password" placeholder="비밀번호" class="form-control d-inline-block w-auto me-2">
             <button type="submit" class="btn btn-danger">삭제</button>
         </form>
-
         <a th:href="@{/posts}" class="btn btn-secondary ms-2">목록으로</a>
     </div>
 
@@ -47,14 +50,26 @@
                         <small class="text-muted ms-2" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">댓글 작성일</small>
                     </div>
                     <div>
-                        <a th:href="@{/comments/{commentId}/edit(commentId=${comment.id})}" class="btn btn-warning btn-sm me-2">수정</a>
+                        <button type="button" class="btn btn-warning btn-sm me-2 edit-comment-btn" th:data-comment-id="${comment.id}">수정</button>
                         <form th:action="@{/comments/{commentId}(commentId=${comment.id})}" method="post" class="d-inline">
                             <input type="hidden" name="_method" value="delete">
                             <button type="submit" class="btn btn-danger btn-sm">삭제</button>
                         </form>
                     </div>
                 </div>
-                <p class="mt-2 mb-1" th:text="${comment.content}">댓글 내용입니다.</p>
+                <p class="mt-2 mb-1 comment-text" th:text="${comment.content}">댓글 내용입니다.</p>
+
+                <form th:action="@{/comments/{commentId}(commentId=${comment.id})}" method="post" class="hidden-form mt-2 edit-form-for-comment" th:id="'editForm-' + ${comment.id}">
+                    <input type="hidden" name="_method" value="put">
+                    <div class="mb-2">
+                        <textarea class="form-control" name="content" rows="2" th:text="${comment.content}"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" name="password" placeholder="비밀번호" class="form-control form-control-sm">
+                        <button type="submit" class="btn btn-primary btn-sm">수정 완료</button>
+                        <button type="button" class="btn btn-secondary btn-sm cancel-edit-btn">취소</button>
+                    </div>
+                </form>
             </li>
         </ul>
     </div>
@@ -80,6 +95,38 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.edit-comment-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.getAttribute('data-comment-id');
+                const commentItem = this.closest('li');
+
+                // 기존 내용과 버튼을 숨깁니다.
+                commentItem.querySelector('.comment-text').style.display = 'none';
+                this.closest('div').style.display = 'none'; // 수정/삭제 버튼 컨테이너 숨기기
+
+                // 수정 폼을 보이게 합니다.
+                const editForm = document.getElementById('editForm-' + commentId);
+                editForm.style.display = 'block';
+            });
+        });
+
+        document.querySelectorAll('.cancel-edit-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentItem = this.closest('li');
+
+                // 수정 폼을 숨깁니다.
+                this.closest('form').style.display = 'none';
+
+                // 기존 내용과 버튼을 다시 보이게 합니다.
+                commentItem.querySelector('.comment-text').style.display = 'block';
+                commentItem.querySelector('.edit-comment-btn').closest('div').style.display = 'block';
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
