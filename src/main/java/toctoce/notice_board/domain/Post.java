@@ -50,4 +50,8 @@ public class Post {
         this.content = dto.getContent();
         this.updatedAt = LocalDateTime.now();
     }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 }

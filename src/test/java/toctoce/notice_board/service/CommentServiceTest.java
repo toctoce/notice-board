@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import toctoce.notice_board.domain.Comment;
+import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.CommentCreateRequestDto;
 import toctoce.notice_board.dto.CommentUpdateRequestDto;
 import toctoce.notice_board.dto.PostCreateRequestDto;
@@ -12,6 +14,7 @@ import toctoce.notice_board.dto.PostCreateRequestDto;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 public class CommentServiceTest {
     @Autowired PostService postService;
     @Autowired CommentService commentService;
@@ -26,7 +29,7 @@ public class CommentServiceTest {
         //then
         Comment comment = commentService.findOne(commentId);
         assertEquals("content1", comment.getContent());
-        assertEquals("author1", comment.getAuther());
+        assertEquals("author1", comment.getAuthor());
         assertEquals("password1", comment.getPassword());
     }
     @Test
@@ -81,6 +84,9 @@ public class CommentServiceTest {
         Comment comment = commentService.findOne(commentId);
         assertEquals("content1", comment.getContent());
         assertNotNull(comment.getDeletedAt());
+
+        Post post = postService.findOne(postId);
+        assertEquals(0, post.getComments().size());
     }
     @Test
     public void 댓글_삭제_실패() {
@@ -96,6 +102,9 @@ public class CommentServiceTest {
         Comment comment = commentService.findOne(commentId);
         assertEquals("content1", comment.getContent());
         assertNull(comment.getDeletedAt());
+
+        Post post = postService.findOne(postId);
+        assertEquals(1, post.getComments().size());
     }
     private long createPost() {
         PostCreateRequestDto dto = new PostCreateRequestDto();

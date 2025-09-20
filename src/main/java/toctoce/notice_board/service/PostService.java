@@ -3,12 +3,14 @@ package toctoce.notice_board.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import toctoce.notice_board.domain.Comment;
 import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 import toctoce.notice_board.dto.PostUpdateRequestDto;
 import toctoce.notice_board.repository.PostRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +27,15 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Post findOne(long id) {
-        return postRepository.findOne(id);
+        Post post = postRepository.findOne(id);
+
+        List<Comment> activeComments = post.getComments().stream()
+                .filter(comment -> comment.getDeletedAt() == null)
+                .collect(Collectors.toList());
+
+        post.setComments(activeComments);
+
+        return post;
     }
 
     @Transactional(readOnly = true)

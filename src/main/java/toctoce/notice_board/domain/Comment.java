@@ -20,7 +20,7 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    private String auther;
+    private String author;
     private String content;
     private String password;
 
@@ -37,7 +37,7 @@ public class Comment {
         Comment comment = new Comment();
         comment.setPost(post);
 
-        comment.auther = dto.getAuthor();
+        comment.author = dto.getAuthor();
         comment.content = dto.getContent();
         comment.password = dto.getPassword();
         comment.createdAt = LocalDateTime.now();
