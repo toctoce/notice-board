@@ -3,10 +3,7 @@ package toctoce.notice_board.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 import toctoce.notice_board.dto.PostUpdateRequestDto;
@@ -56,5 +53,11 @@ public class PostController {
     public String editPost(PostUpdateRequestDto dto, @PathVariable long postId) {
         postService.updatePost(postId, dto);
         return "redirect:/posts/" + postId;
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public String deletePost(String password, @PathVariable long postId) {
+        postService.deletePost(postId, password);
+        return "redirect:/posts";
     }
 }
