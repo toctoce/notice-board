@@ -8,7 +8,7 @@
 <body>
 
 <div class="container mt-5">
-    <h2>게시글 수정</h2>
+    <h2>익명 게시판</h2>
     <hr>
 
     <form th:action="@{/posts/{postId}/edit(postId=${post.id})}" th:object="${post}" method="post">
