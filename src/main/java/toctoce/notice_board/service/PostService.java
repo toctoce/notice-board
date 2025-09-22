@@ -7,6 +7,7 @@ import toctoce.notice_board.domain.Comment;
 import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 import toctoce.notice_board.dto.PostUpdateRequestDto;
+import toctoce.notice_board.repository.CommentRepository;
 import toctoce.notice_board.repository.PostRepository;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     public long createPost(PostCreateRequestDto dto) {
         Post post = Post.createPost(dto);
@@ -29,9 +31,7 @@ public class PostService {
     public Post findOne(long id) {
         Post post = postRepository.findOne(id);
 
-        List<Comment> activeComments = post.getComments().stream()
-                .filter(comment -> comment.getDeletedAt() == null)
-                .collect(Collectors.toList());
+        List<Comment> activeComments = commentRepository.findByPostId(id);
 
         post.setComments(activeComments);
 
