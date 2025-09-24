@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import toctoce.notice_board.domain.Comment;
 import toctoce.notice_board.domain.Post;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 import toctoce.notice_board.dto.PostUpdateRequestDto;
+import toctoce.notice_board.service.CommentService;
 import toctoce.notice_board.service.PostService;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping("/posts")
     public String home(Model model) {
@@ -38,7 +41,11 @@ public class PostController {
     @GetMapping("/posts/{postId}")
     public String showPost(Model model, @PathVariable long postId) {
         Post post = postService.findOne(postId);
+        List<Comment> comments = commentService.findPostComments(postId);
+
         model.addAttribute("post", post);
+        model.addAttribute("comments", comments);
+
         return "posts/postDetail";
     }
 

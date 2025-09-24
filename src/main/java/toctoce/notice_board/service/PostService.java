@@ -31,10 +31,6 @@ public class PostService {
     public Post findOne(long id) {
         Post post = postRepository.findOne(id);
 
-        List<Comment> activeComments = commentRepository.findByPostId(id);
-
-        post.setComments(activeComments);
-
         return post;
     }
 
