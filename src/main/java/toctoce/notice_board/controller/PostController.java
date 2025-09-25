@@ -56,7 +56,7 @@ public class PostController {
         return "posts/editPostForm";
     }
 
-    @PutMapping("/posts/{postId}/edit")
+    @PutMapping("/posts/{postId}")
     public String editPost(PostUpdateRequestDto dto, @PathVariable long postId) {
         postService.updatePost(postId, dto);
         return "redirect:/posts/" + postId;

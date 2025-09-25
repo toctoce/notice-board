@@ -89,7 +89,7 @@ class PostControllerTest {
         willDoNothing().given(postService).updatePost(anyLong(), any(PostUpdateRequestDto.class));
 
         // when & then:
-        mockMvc.perform(put("/posts/1/edit")
+        mockMvc.perform(put("/posts/1")
                         .param("title", "수정된 제목")
                         .param("password", "1234")
                         .param("content", "수정된 내용"))
