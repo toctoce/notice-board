@@ -22,7 +22,7 @@ public class CommentRepository {
     }
 
     public List<Comment> findByPostId(long postId) {
-        return em.createQuery("select c from Comment c where c.post = :postId", Comment.class)
+        return em.createQuery("select c from Comment c where c.post.id = :postId and c.deletedAt IS NULL", Comment.class)
                 .setParameter("postId", postId)
                 .getResultList();
     }

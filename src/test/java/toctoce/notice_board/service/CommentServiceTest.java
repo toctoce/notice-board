@@ -11,6 +11,8 @@ import toctoce.notice_board.dto.CommentCreateRequestDto;
 import toctoce.notice_board.dto.CommentUpdateRequestDto;
 import toctoce.notice_board.dto.PostCreateRequestDto;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -85,8 +87,8 @@ public class CommentServiceTest {
         assertEquals("content1", comment.getContent());
         assertNotNull(comment.getDeletedAt());
 
-        Post post = postService.findOne(postId);
-        assertEquals(0, post.getComments().size());
+        List<Comment> comments = commentService.findPostComments(postId);
+        assertEquals(0, comments.size());
     }
     @Test
     public void 댓글_삭제_실패() {
